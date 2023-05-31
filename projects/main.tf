@@ -14,17 +14,16 @@ locals {
     "composer.googleapis.com"
   ]
 }
-#test
 
 resource "google_project_service" "services" {
   for_each                   = toset(local.services)
-  project                    = google_project.kirsch_becker.project_id
+  project                    = "kirsch-becker"
   service                    = each.key
   disable_dependent_services = true
 }
 
 resource "google_project_iam_binding" "kirsch_becker" {
-  project = google_project.kirsch_becker.project_id
+  project = "kirsch-becker"
   role    = "roles/owner"
 
   members = [
@@ -36,20 +35,20 @@ resource "google_project_iam_binding" "kirsch_becker" {
 
 resource "google_storage_bucket" "kirsch_becker_data" {
   name          = "kirsch-becker-data"
-  project       = google_project.kirsch_becker.project_id
+  project       = "kirsch-becker"
   location      = "us-central1"
   force_destroy = true
   depends_on    = [google_project_iam_binding.kirsch_becker]
 }
 
 resource "google_project_iam_member" "composer-service-agent" {
-  project = google_project.kirsch_becker.project_id
+  project = "kirsch-becker"
   role    = "roles/composer.ServiceAgentV2Ext"
-  member  = "serviceAccount:service-${google_project.kirsch_becker.number}@cloudcomposer-accounts.iam.gserviceaccount.com"
+  member  = "serviceAccount:service-533271204219@cloudcomposer-accounts.iam.gserviceaccount.com"
 }
 
 resource "google_composer_environment" "composer" {
-  project = google_project.kirsch_becker.project_id
+  project = "kirsch-becker"
   name    = "kirsch-data-platform-composer-environment"
   region  = "us-central1"
   config {
@@ -63,7 +62,7 @@ resource "google_composer_environment" "composer" {
 
 
 resource "google_artifact_registry_repository" "repositories" {
-  project       = google_project.kirsch_becker.project_id
+  project       = "kirsch-becker"
   location      = "us-central1"
   repository_id = "docker-repository"
   format        = "DOCKER"
