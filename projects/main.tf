@@ -6,6 +6,7 @@ locals {
     "artifactregistry.googleapis.com",
     "cloudbuild.googleapis.com",
     "cloudscheduler.googleapis.com",
+    "cloudresourcemanager.googleapis.com",
     "iam.googleapis.com",
     "compute.googleapis.com",
     "bigquery.googleapis.com",
@@ -31,6 +32,7 @@ resource "google_project_iam_binding" "kirsch_becker" {
     "serviceAccount:533271204219@cloudbuild.gserviceaccount.com",
     "user:kjamesbecker@gmail.com"
   ]
+  depends_on = [google_project_service.services["cloudresourcemanager.googleapis.com"]]
 }
 
 resource "google_storage_bucket" "kirsch_becker_data" {
