@@ -68,4 +68,4 @@ resource "google_project_iam_binding" "kirsch_becker" {
 #   repository_id = "docker-repository"
 #   format        = "DOCKER"
 #   depends_on    = [google_project_service.services["artifactregistry.googleapis.com"]]
-}
+# }
