@@ -1,10 +1,3 @@
-resource "google_project" "kirsch_becker" {
-  name            = "kirsch-becker"
-  project_id      = "kirsch-becker"
-  org_id          = "533271204219"
-  billing_account = "017B88-8C0A65-C8A6AB"
-}
-
 locals {
   services = [
     "storage-api.googleapis.com",
@@ -36,14 +29,12 @@ resource "google_project_iam_binding" "kirsch_becker" {
   members = [
     "user:jakekirsch11@gmail.com",
     "serviceAccount:533271204219@cloudbuild.gserviceaccount.com",
-    "serviceAccount:${google_project.kirsch_becker.number}-compute@developer.gserviceaccount.com",
     "user:kjamesbecker@gmail.com"
   ]
 }
 
-
-resource "google_storage_bucket" "data_platform_data" {
-  name          = "data-platform-data"
+resource "google_storage_bucket" "kirsch_becker_data" {
+  name          = "kirsch-becker-data"
   project       = google_project.kirsch_becker.project_id
   location      = "us-central1"
   force_destroy = true

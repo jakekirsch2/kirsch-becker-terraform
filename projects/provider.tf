@@ -7,13 +7,13 @@ terraform {
   }
 
   backend "gcs" {
-    bucket = "mallak-kirsch-tfstate"
-    prefix = "terraform-test"
+    bucket = "kirsch-becker-tfstate"
+    prefix = "terraform"
   }
 }
 
 provider "google" {
-  project = "mallak-kirsch"
+  project = "kirsch-becker"
   region  = "us-central1"
   zone    = "us-central1-c"
 }
