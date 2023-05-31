@@ -14,6 +14,7 @@ locals {
     "composer.googleapis.com"
   ]
 }
+#test
 
 resource "google_project_service" "services" {
   for_each                   = toset(local.services)
