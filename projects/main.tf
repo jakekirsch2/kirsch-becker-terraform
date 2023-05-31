@@ -40,7 +40,7 @@ resource "google_service_account" "airflow" {
   display_name = "airflow"
 }
 
-resource "google_project_iam_binding" "kirsch_becker" {
+resource "google_project_iam_binding" "airflow" {
   project = "kirsch-becker"
   role    = "roles/editor"
 
