@@ -40,12 +40,13 @@ resource "google_service_account" "airflow" {
   display_name = "airflow"
 }
 
-resource "google_project_iam_binding" "airflow" {
+resource "google_project_iam_binding" "editors" {
   project = "kirsch-becker"
   role    = "roles/editor"
 
   members = [
-    "serviceAccount:${google_service_account.airflow.email}"
+    "serviceAccount:${google_service_account.airflow.email}",
+    "serviceAccount:533271204219@cloudservices.gserviceaccount.com"
   ]
 }
 
