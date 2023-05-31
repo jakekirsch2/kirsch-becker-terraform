@@ -33,6 +33,22 @@ resource "google_project_iam_binding" "kirsch_becker" {
   ]
 }
 
+#create airflow service account
+resource "google_service_account" "airflow" {
+  project      = "kirsch-becker"
+  account_id   = "airflow"
+  display_name = "airflow"
+}
+
+resource "google_project_iam_binding" "kirsch_becker" {
+  project = "kirsch-becker"
+  role    = "roles/editor"
+
+  members = [
+    "serviceAccount:${google_service_account.airflow.email}"
+  ]
+}
+
 resource "google_storage_bucket" "kirsch_becker_data" {
   name          = "kirsch-becker-data"
   project       = "kirsch-becker"
@@ -48,17 +64,31 @@ resource "google_project_iam_member" "composer-service-agent" {
   depends_on = [google_project_service.services["composer.googleapis.com"]]
 }
 
+resource "google_service_account" "composer_worker" {
+  project      = "kirsch-becker"
+  account_id   = "composer-worker"
+  display_name = "composer-worker"
+}
+
+resource "google_project_iam_member" "composer_worker" {
+  role   = "roles/composer.worker"
+  member = "serviceAccount:${google_service_account.composer_worker.email}"
+}
+
 resource "google_composer_environment" "composer" {
   project = "kirsch-becker"
-  name    = "kirsch-data-platform-composer-environment"
+  name    = "kirsch-becker-composer-environment"
   region  = "us-central1"
   config {
+    node_config {
+      service_account = google_service_account.composer_worker.email
+    }
     software_config {
       image_version = "composer-2-airflow-2"
     }
   }
 
-  depends_on = [google_project_service.services["composer.googleapis.com"], google_project_iam_member.composer-service-agent]
+  depends_on = [google_project_service.services["composer.googleapis.com"], google_project_iam_member.composer-service-agent, google_project_iam_member.composer_worker]
 }
 
 
