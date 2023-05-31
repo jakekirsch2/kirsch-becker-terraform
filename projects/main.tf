@@ -45,6 +45,7 @@ resource "google_project_iam_member" "composer-service-agent" {
   project = "kirsch-becker"
   role    = "roles/composer.ServiceAgentV2Ext"
   member  = "serviceAccount:service-533271204219@cloudcomposer-accounts.iam.gserviceaccount.com"
+  depends_on = [google_project_service.services["composer.googleapis.com"]]
 }
 
 resource "google_composer_environment" "composer" {
@@ -66,4 +67,5 @@ resource "google_artifact_registry_repository" "repositories" {
   location      = "us-central1"
   repository_id = "docker-repository"
   format        = "DOCKER"
+  depends_on    = [google_project_service.services["artifactregistry.googleapis.com"]]
 }
