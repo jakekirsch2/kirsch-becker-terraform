@@ -62,6 +62,7 @@ resource "google_storage_bucket" "kirsch_becker_data" {
 resource "google_project_iam_member" "composer-service-agent" {
   project = "kirsch-becker"
   role    = "roles/composer.ServiceAgentV2Ext"
+  service_account_id = google_service_account.composer_worker.name
   member  = "serviceAccount:service-533271204219@cloudcomposer-accounts.iam.gserviceaccount.com"
   depends_on = [google_project_service.services["composer.googleapis.com"]]
 }
@@ -78,28 +79,35 @@ resource "google_project_iam_member" "composer_worker" {
   member = "serviceAccount:${google_service_account.composer_worker.email}"
 }
 
-resource "google_project_iam_member" "composer_admin" {
-  project      = "kirsch-becker"
-  role   = "roles/composer.admin"
-  member = "serviceAccount:${google_service_account.composer_worker.email}"
-}
-
-resource "google_storage_bucket_iam_member" "gcs_member" {
-  bucket = "us.artifacts.kirsch-becker.appspot.com"
-  role   = "roles/storage.objectViewer"
-  member = "serviceAccount:${google_service_account.composer_worker.email}"
-}
-
 resource "google_composer_environment" "composer" {
   project = "kirsch-becker"
   name    = "kirsch-becker-composer-environment"
   region  = "us-central1"
   config {
-    node_config {
-      service_account = "${google_service_account.composer_worker.email}"
-    }
     software_config {
       image_version = "composer-2-airflow-2"
+    }
+    workloads_config {
+      scheduler {
+        cpu        = 0.5
+        memory_gb  = 1.875
+        storage_gb = 1
+        count      = 1
+      }
+      web_server {
+        cpu        = 0.5
+        memory_gb  = 1.875
+        storage_gb = 1
+      }
+      worker {
+        cpu = 0.5
+        memory_gb  = 1.875
+        storage_gb = 1
+        min_count  = 1
+        max_count  = 3
+      }
+
+
     }
   }
 
