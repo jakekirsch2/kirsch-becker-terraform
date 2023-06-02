@@ -62,21 +62,8 @@ resource "google_storage_bucket" "kirsch_becker_data" {
 resource "google_project_iam_member" "composer-service-agent" {
   project = "kirsch-becker"
   role    = "roles/composer.ServiceAgentV2Ext"
-  service_account_id = google_service_account.composer_worker.name
   member  = "serviceAccount:service-533271204219@cloudcomposer-accounts.iam.gserviceaccount.com"
   depends_on = [google_project_service.services["composer.googleapis.com"]]
-}
-
-resource "google_service_account" "composer_worker" {
-  project      = "kirsch-becker"
-  account_id   = "composer-worker"
-  display_name = "composer-worker"
-}
-
-resource "google_project_iam_member" "composer_worker" {
-  project      = "kirsch-becker"
-  role   = "roles/composer.worker"
-  member = "serviceAccount:${google_service_account.composer_worker.email}"
 }
 
 resource "google_composer_environment" "composer" {
