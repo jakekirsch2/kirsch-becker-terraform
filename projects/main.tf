@@ -99,10 +99,7 @@ resource "google_composer_environment" "composer" {
   }
 
   depends_on = [google_project_service.services["composer.googleapis.com"],
-  google_project_iam_member.composer-service-agent,
-  google_project_iam_member.composer_worker,
-  google_project_iam_member.composer_admin,
-  google_storage_bucket_iam_member.gcs_member]
+  google_project_iam_member.composer-service-agent]
 }
 
 
