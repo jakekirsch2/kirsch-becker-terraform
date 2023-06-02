@@ -46,7 +46,8 @@ resource "google_project_iam_binding" "editors" {
 
   members = [
     "serviceAccount:${google_service_account.airflow.email}",
-    "serviceAccount:533271204219@cloudservices.gserviceaccount.com"
+    "serviceAccount:533271204219@cloudservices.gserviceaccount.com",
+    "serviceAccount:533271204219-compute@developer.gserviceaccount.com"
   ]
 }
 
@@ -65,32 +66,18 @@ resource "google_project_iam_member" "composer-service-agent" {
   depends_on = [google_project_service.services["composer.googleapis.com"]]
 }
 
-resource "google_service_account" "composer_worker" {
-  project      = "kirsch-becker"
-  account_id   = "composer-worker"
-  display_name = "composer-worker"
-}
-
-resource "google_project_iam_member" "composer_worker" {
-  project      = "kirsch-becker"
-  role   = "roles/composer.worker"
-  member = "serviceAccount:${google_service_account.composer_worker.email}"
-}
 
 resource "google_composer_environment" "composer" {
   project = "kirsch-becker"
   name    = "kirsch-becker-composer-environment"
   region  = "us-central1"
   config {
-    node_config {
-      service_account = google_service_account.composer_worker.email
-    }
     software_config {
       image_version = "composer-2-airflow-2"
     }
   }
 
-  depends_on = [google_project_service.services["composer.googleapis.com"], google_project_iam_member.composer-service-agent, google_project_iam_member.composer_worker]
+  depends_on = [google_project_service.services["composer.googleapis.com"], google_project_iam_member.composer-service-agent, google_project_iam_member.editors]
 }
 
 
