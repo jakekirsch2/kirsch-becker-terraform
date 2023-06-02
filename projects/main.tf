@@ -77,7 +77,7 @@ resource "google_composer_environment" "composer" {
     }
   }
 
-  depends_on = [google_project_service.services["composer.googleapis.com"], google_project_iam_member.composer-service-agent, google_project_iam_member.editors]
+  depends_on = [google_project_service.services["composer.googleapis.com"], google_project_iam_member.composer-service-agent, google_project_iam_binding.editors]
 }
 
 
