@@ -4,5 +4,5 @@ Once composer is built, enable workload identity:
 
     kubectl create namespace airflow-jobs
     kubectl create serviceaccount airflow-jobs-runner --namespace airflow-jobs
-    gcloud iam service-accounts add-iam-policy-binding {service account used to run jobs} --role roles/iam.workloadIdentityUser --member "serviceAccount:kirsch-becker.svc.id.goog[airflow-jobs/airflow-jobs-runner]"
-    kubectl annotate serviceaccount airflow-jobs-runner --namespace airflow-jobs  iam.gke.io/gcp-service-account={service account used to run jobs}
+    gcloud iam service-accounts add-iam-policy-binding airflow@kirsch-becker.iam.gserviceaccount.com --role roles/iam.workloadIdentityUser --member "serviceAccount:kirsch-becker.svc.id.goog[airflow-jobs/airflow-jobs-runner]"
+    kubectl annotate serviceaccount airflow-jobs-runner --namespace airflow-jobs  iam.gke.io/gcp-service-account=airflow@kirsch-becker.iam.gserviceaccount.com
