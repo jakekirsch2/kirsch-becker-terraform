@@ -84,7 +84,7 @@ resource "google_project_iam_member" "composer_admin" {
   member = "serviceAccount:${google_service_account.composer_worker.email}"
 }
 
-resource "google_project_iam_member" "gcs_member" {
+resource "google_storage_bucket_iam_member" "gcs_member" {
   project      = "kirsch-becker"
   bucket = "us.artifacts.kirsch-becker.appspot.com"
   role   = "roles/storage.objectViewer"
@@ -108,7 +108,7 @@ resource "google_composer_environment" "composer" {
   google_project_iam_member.composer-service-agent,
   google_project_iam_member.composer_worker,
   google_project_iam_member.composer_admin,
-  google_project_iam_member.gcs_member]
+  google_storage_bucket_iam_member.gcs_member]
 }
 
 
